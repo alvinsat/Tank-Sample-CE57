@@ -4,6 +4,8 @@
 *.thmb.*
 logbackups/
 Editor/
+user/
+
 
 # CRYENGINE build & generator directories
 /bin/
