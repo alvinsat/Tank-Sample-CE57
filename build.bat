@@ -10,7 +10,7 @@ if exist "%CACHE_FILE%" (
     if exist "!CACHED_PATH!" (
         set "CMAKE_EXE=!CACHED_PATH!"
         echo [CACHE] Found valid CMake path in temp.
-        goto :START_BUILD
+        goto :SHOW_VERSION_AND_BUILD
     ) else (
         echo [CACHE] Cached path is invalid. Re-searching...
         del "%CACHE_FILE%"
@@ -53,8 +53,17 @@ if not defined CMAKE_EXE (
 echo %CMAKE_EXE%>"%CACHE_FILE%"
 echo [SEARCH] Found and cached: "%CMAKE_EXE%"
 
-:START_BUILD
+:SHOW_VERSION_AND_BUILD
 echo.
+echo ========================================
+echo Executable Path : %CMAKE_EXE%
+REM Extract and display only the first line of 'cmake --version' output
+for /f "delims=" %%v in ('"%CMAKE_EXE%" --version 2^>nul') do (
+    echo CMake Version   : %%v
+    goto :START_BUILD
+)
+
+:START_BUILD
 echo ========================================
 echo Executing Build...
 echo ========================================

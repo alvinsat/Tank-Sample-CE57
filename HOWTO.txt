@@ -1,2 +1,9 @@
+Requires:
+1. Cmake version 3.24.0
+2. CryEngine 5.7
+3. Visual Studio 2022
+
+Steps:
 1. Generate Visual Studio solution from cryproject
-2. run build.bat
+2. Run build.bat
+3. Open Project
