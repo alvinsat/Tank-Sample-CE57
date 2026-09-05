@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="f1e3a9eb-e381-a914-42bf-36ef1b2e7dab">
+ <Files>
+  <File path="blood_splatter_b_ddna.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

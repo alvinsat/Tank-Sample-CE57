@@ -1,0 +1,14 @@
+<AssetMetadata version="0" type="Texture" guid="36e616ef-837d-3e7f-4b69-be84b068f51b">
+ <Files>
+  <File path="sparks_multi_tiled.dds"/>
+  <File path="sparks_multi_tiled.dds.1"/>
+  <File path="sparks_multi_tiled.dds.2"/>
+  <File path="sparks_multi_tiled.dds.3"/>
+  <File path="sparks_multi_tiled.dds.4"/>
+ </Files>
+ <Details>
+  <Detail name="width">256</Detail>
+  <Detail name="height">256</Detail>
+  <Detail name="mipCount">7</Detail>
+ </Details>
+</AssetMetadata>

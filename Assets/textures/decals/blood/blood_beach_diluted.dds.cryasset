@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="cf41efcf-0687-89a6-cb5f-92fd4247105c">
+ <Files>
+  <File path="blood_beach_diluted.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">1024</Detail>
+  <Detail name="height">1024</Detail>
+  <Detail name="mipCount">9</Detail>
+ </Details>
+</AssetMetadata>

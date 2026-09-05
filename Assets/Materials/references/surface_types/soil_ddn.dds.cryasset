@@ -1,0 +1,15 @@
+<AssetMetadata version="0" type="Texture" guid="5b0d4d2e-26bb-9a73-bcfd-96f98171614e">
+ <Files>
+  <File path="soil_ddn.dds"/>
+  <File path="soil_ddn.dds.1"/>
+  <File path="soil_ddn.dds.2"/>
+  <File path="soil_ddn.dds.3"/>
+  <File path="soil_ddn.dds.4"/>
+  <File path="soil_ddn.dds.5"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

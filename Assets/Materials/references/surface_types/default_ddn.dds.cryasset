@@ -1,0 +1,15 @@
+<AssetMetadata version="0" type="Texture" guid="1bf59e04-f540-caf6-4087-fb586d164cac">
+ <Files>
+  <File path="default_ddn.dds"/>
+  <File path="default_ddn.dds.1"/>
+  <File path="default_ddn.dds.2"/>
+  <File path="default_ddn.dds.3"/>
+  <File path="default_ddn.dds.4"/>
+  <File path="default_ddn.dds.5"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

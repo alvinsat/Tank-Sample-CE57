@@ -1,0 +1,6 @@
+<download name="tanksample" type="Map">
+ <index src="filelist.xml" dest="filelist.xml"/>
+ <files>
+  <file src="level.pak" dest="level.pak" size="11162914" md5="9c76780a3a89151264e32ebd93d361bf"/>
+ </files>
+</download>

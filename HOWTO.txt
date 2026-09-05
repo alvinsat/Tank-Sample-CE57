@@ -1,0 +1,2 @@
+1. Generate Visual Studio solution from cryproject
+2. run build.bat

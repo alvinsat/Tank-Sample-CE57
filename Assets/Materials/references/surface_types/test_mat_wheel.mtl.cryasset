@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="cf45e4ca-0454-5ec0-19b5-bb71ee50fd50">
+ <Files>
+  <File path="test_mat_wheel.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/defaults/grey.dds</Path>
+ </Dependencies>
+</AssetMetadata>

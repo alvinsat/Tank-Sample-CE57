@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="edc3875b-ce25-58c6-eceb-c059f1d604e3">
+ <Files>
+  <File path="rough_surface_a_dmap.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">2048</Detail>
+  <Detail name="height">2048</Detail>
+  <Detail name="mipCount">12</Detail>
+ </Details>
+</AssetMetadata>

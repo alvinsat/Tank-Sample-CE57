@@ -1,0 +1,114 @@
+<CrySchematyc CryXmlVersion="2" version="105" guid="71df595c-6fd7-45f5-a788-281f05d243f8" scope="">
+ <root elementType="Class" guid="184ba3a4-a8aa-4403-841f-64d9f45834f8" name="myschematyc" Schematyc::EMPEnv="clientserver">
+  <userDocumentation author="User" description=""/>
+  <extensions />
+  <children>
+   <element elementType="Constructor" guid="1e68ad8c-aac2-4314-8d82-f571d4f976b9" name="ConstructionGraph" Schematyc::EMPEnv="clientserver">
+    <userDocumentation author="User" description=""/>
+    <extensions>
+     <Graph>
+      <pos x="0" y="0"/>
+      <nodes>
+       <element key="02766729-75f5-4f1d-9172-ddd21e17aca8" typeGUID="12bdfa06-ba95-4e48-bb2d-bb48a7080abc">
+        <value guid="02766729-75f5-4f1d-9172-ddd21e17aca8">
+         <pos x="0" y="0"/>
+        </value>
+       </element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </element>
+   <element elementType="SignalReceiver" guid="f01762b1-aada-4d7b-a374-6a9b557d8e2e" name="SignalGraph" Schematyc::EMPEnv="clientserver" type="Universal" signalGUID="">
+    <userDocumentation author="User" description=""/>
+    <extensions>
+     <Graph>
+      <pos x="319" y="95"/>
+      <nodes>
+       <element key="691b98be-fdf5-49d5-902b-e1aec199360e" typeGUID="ad2aee64-0a60-4469-8ec7-38b4b720d30c">
+        <value guid="691b98be-fdf5-49d5-902b-e1aec199360e" objectGUID="">
+         <pos x="0" y="0"/>
+         <signalId domain="Env" guid="a9279137-7c66-491d-b9a0-8752c24c8979"/>
+        </value>
+       </element>
+       <element key="4c9fe69b-e95b-4ac8-aeeb-dac9746ada4e" typeGUID="ad2aee64-0a60-4469-8ec7-38b4b720d30c">
+        <value guid="4c9fe69b-e95b-4ac8-aeeb-dac9746ada4e" objectGUID="">
+         <pos x="0" y="200"/>
+         <signalId domain="Env" guid="b2561caa-0753-458b-a91f-e8e38b0f0cdf"/>
+        </value>
+       </element>
+       <element key="dddf4383-939b-4c9c-ba8c-259c29e40872" typeGUID="ad2aee64-0a60-4469-8ec7-38b4b720d30c">
+        <value guid="dddf4383-939b-4c9c-ba8c-259c29e40872" objectGUID="">
+         <pos x="0" y="100"/>
+         <signalId domain="Env" guid="52ad5add-7781-429b-b4a9-0cb6c905e353"/>
+        </value>
+       </element>
+       <element key="d3ea34de-1956-4d36-97ce-ea8d77e350b6" typeGUID="a15c2533-d004-4266-b121-68404aa5e02f">
+        <value guid="d3ea34de-1956-4d36-97ce-ea8d77e350b6" referenceGUID="f0581309-ef2a-420d-a9b1-2cbf3794c2a1" memberId="1701734254">
+         <pos x="214" y="-28"/>
+        </value>
+       </element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </element>
+   <element elementType="Base" guid="73d8ee31-a52b-484f-b67b-7be00f9f8b76" name="Base [Entity]" Schematyc::EMPEnv="clientserver">
+    <classId domain="Env" guid="be845278-0dd2-409f-b8be-97895607c256"/>
+    <envClassProperties icon="%EDITOR%/objecticons/schematyc.bmp" bHideInEditor="false" bTriggerAreas="true" bCreatePerClient="false"/>
+    <extensions />
+    <children>
+     <element elementType="ComponentInstance" guid="075737d5-7c28-428f-b735-f13aa2ba347b" name="Entity" Schematyc::EMPEnv="clientserver" accessor="Private" typeGUID="e88093df-904f-4c52-af38-911e26777cdc">
+      <properties />
+      <extensions />
+      <children />
+     </element>
+    </children>
+   </element>
+   <element elementType="ComponentInstance" guid="faf7debd-f18c-4598-a93f-924c3c4fb3cc" name="Tank Component" Schematyc::EMPEnv="clientserver" accessor="Private" typeGUID="c5687ded-2e50-4d3f-816e-f510aab326cc">
+    <transform>
+     <translation>
+      <position>
+       <element element="0"/>
+       <element element="0"/>
+       <element element="0"/>
+      </position>
+     </translation>
+     <rotation x="0" y="-0" z="0"/>
+     <scale>
+      <element element="1"/>
+      <element element="1"/>
+      <element element="1"/>
+     </scale>
+    </transform>
+    <properties TankBody="" WheelJointFilter="wheel" WheelRadius="0.44999999" WheelWidth="0.25" WheelSuspensionLength="0.5" WheelSuspensionCompressed="0.34999999" WheelMass="80" WheelDamping="0.69999999" WheelRaycast="false" MaxSpeed="20" RotationSpeed="40" MinTurretPitch="-10" MaxTurretPitch="35" MainCannonReloadTime="2" CoaxialGunReloadTime="0.1" IsEngineRunning="false" IsDestroyed="false" HullDamageMax="2500" HullCurrentDamage="0" EngineDamageMax="1000" EngineCurrentDamage="0" TurretDamageMax="700" TurretCurrentDamage="0" LeftTreadDamageMax="250" LeftTreadCurrentDamage="0" RightTreadDamageMax="250" RightTreadCurrentDamage="0" HeadLightDamageMax="10" BrakeLightDamageMax="10" ExplosionDamageMult="1" BulletDamageMult="0.050000001" RocketDamageMult="1" CollisionDamageMult="0.25">
+     <DriverEnterPos x="-2.5" y="-0.5" z="0.5"/>
+     <DriverSitPos x="-0.5" y="0" z="2"/>
+     <DriverViewPos x="-0.44999999" y="1.75" z="2.3499999"/>
+     <GunnerEnterPos x="2.5" y="-0.5" z="0.5"/>
+     <GunnerSitPos x="0.44999999" y="-0.64999998" z="2"/>
+     <GunnerViewPos x="0.44999999" y="-0.64999998" z="2.8499999"/>
+     <CannonStartPos x="0" y="3.8" z="1.9"/>
+     <CannonOutPos x="0" y="5.8000002" z="1.9"/>
+     <CoaxOutPos x="0.315" y="2.4000001" z="2.0350001"/>
+     <TurretPos x="-0.0013" y="0.1204" z="1.584"/>
+     <BurningPos x="0" y="-1.335" z="1.7"/>
+     <ExhaustPos x="-0.69999999" y="-4" z="1.1621"/>
+     <EngineSmokeOutPos x="0.175" y="-4.0999999" z="1.25"/>
+     <CenterPos x="0" y="-1" z="1.1682"/>
+     <HeadLightLeftPos x="-0.90990001" y="3.55" z="1.23"/>
+     <HeadLightRightPos x="0.91030002" y="3.55" z="1.23"/>
+     <RearLightLeftPos x="-1.6174999" y="-4.4000001" z="1.6125"/>
+     <RearLightRightPos x="1.6174999" y="-4.4000001" z="1.6125"/>
+     <ReverseLightLeftPos x="-1.6174999" y="-4.4000001" z="1.515"/>
+     <ReverseLightRightPos x="1.6174999" y="-4.4000001" z="1.515"/>
+     <BoostOriginPos x="0" y="-4.4000001" z="0.079999998"/>
+    </properties>
+    <extensions />
+    <children />
+   </element>
+  </children>
+ </root>
+</CrySchematyc>

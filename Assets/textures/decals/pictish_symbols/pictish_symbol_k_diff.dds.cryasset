@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="394ac220-2a5e-b4a2-bae9-70e2ca46acc9">
+ <Files>
+  <File path="pictish_symbol_k_diff.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">1024</Detail>
+  <Detail name="height">1024</Detail>
+  <Detail name="mipCount">9</Detail>
+ </Details>
+</AssetMetadata>

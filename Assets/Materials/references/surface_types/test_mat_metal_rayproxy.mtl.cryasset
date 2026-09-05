@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="5d08bc52-f972-57d6-bb35-7c0c2d839cd7">
+ <Files>
+  <File path="test_mat_metal_rayproxy.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/defaults/grey.dds</Path>
+ </Dependencies>
+</AssetMetadata>

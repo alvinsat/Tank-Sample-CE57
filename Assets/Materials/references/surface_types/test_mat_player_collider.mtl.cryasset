@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="d35c0c74-4ea4-7dac-6b49-8dd1ec3081f6">
+ <Files>
+  <File path="test_mat_player_collider.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/defaults/grey.dds</Path>
+ </Dependencies>
+</AssetMetadata>

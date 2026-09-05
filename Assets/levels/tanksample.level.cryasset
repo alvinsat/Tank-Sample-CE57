@@ -1,0 +1,22 @@
+<AssetMetadata version="0" type="Level" guid="835623f6-f1b9-d9b7-ade4-123ccb094272" source="" timestamp="1779900957">
+ <Files>
+  <File path="tanksample/tanksample.level"/>
+ </Files>
+ <Dependencies>
+  <Path usageCount="1">%ENGINE%/EngineAssets/Shading/default.env</Path>
+  <Path>%engine%/config/defaultscripts/compressionpolicy.xml</Path>
+  <Path>%engine%/engineassets/icons/averagememoryusage.dds</Path>
+  <Path>%engine%/engineassets/icons/highmemoryusage.dds</Path>
+  <Path>%engine%/engineassets/icons/livepreview.dds</Path>
+  <Path>%engine%/engineassets/icons/lowmemoryusage.dds</Path>
+  <Path>%engine%/engineassets/objects/primitive_cube.cgf</Path>
+  <Path>%engine%/engineassets/textures/grey.dds</Path>
+  <Path>libs/particles/vehicles.xml</Path>
+  <Path>materials/bullet.mtl</Path>
+  <Path>models/sample1/tank-sample1-barrel-1.cgf</Path>
+  <Path>models/sample1/tank-sample1-body.cgf</Path>
+  <Path>models/sample1/tank-sample1-turret.cgf</Path>
+  <Path>scripts/ai/factions.xml</Path>
+  <Path>scripts/network/compressionpolicy.xml</Path>
+ </Dependencies>
+</AssetMetadata>

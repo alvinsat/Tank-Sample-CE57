@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="aecd90c4-8dd4-aebb-de17-f3587cdd378a">
+ <Files>
+  <File path="blood_droplets2_ddna.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

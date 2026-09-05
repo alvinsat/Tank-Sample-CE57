@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="6836e8a6-bf27-9676-acf8-cb3d9b5e3249">
+ <Files>
+  <File path="na_tree_roots_decal_a_diff.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

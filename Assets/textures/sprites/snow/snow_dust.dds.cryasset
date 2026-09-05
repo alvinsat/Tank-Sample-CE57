@@ -1,0 +1,13 @@
+<AssetMetadata version="0" type="Texture" guid="8da63da7-5929-e904-ee44-b5077d767486">
+ <Files>
+  <File path="snow_dust.dds"/>
+  <File path="snow_dust.dds.1"/>
+  <File path="snow_dust.dds.2"/>
+  <File path="snow_dust.dds.3"/>
+ </Files>
+ <Details>
+  <Detail name="width">128</Detail>
+  <Detail name="height">128</Detail>
+  <Detail name="mipCount">6</Detail>
+ </Details>
+</AssetMetadata>

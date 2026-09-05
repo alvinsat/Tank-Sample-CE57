@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="0b7947ea-cb97-e1b6-8d33-cdd83ffdbb64">
+ <Files>
+  <File path="fire_embers.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/sprites/glow/glow_tiled.dds</Path>
+ </Dependencies>
+</AssetMetadata>

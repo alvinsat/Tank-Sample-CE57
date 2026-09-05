@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="e4431bec-f1d8-53df-d139-304d84bf4d81">
+ <Files>
+  <File path="pictish_symbol_k_ddna.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">1024</Detail>
+  <Detail name="height">1024</Detail>
+  <Detail name="mipCount">9</Detail>
+ </Details>
+</AssetMetadata>

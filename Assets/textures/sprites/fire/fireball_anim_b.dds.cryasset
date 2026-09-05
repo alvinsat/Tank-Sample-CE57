@@ -1,0 +1,17 @@
+<AssetMetadata version="0" type="Texture" guid="929ac977-c228-c190-97f0-8c6279604b2b">
+ <Files>
+  <File path="fireball_anim_b.dds"/>
+  <File path="fireball_anim_b.dds.1"/>
+  <File path="fireball_anim_b.dds.2"/>
+  <File path="fireball_anim_b.dds.3"/>
+  <File path="fireball_anim_b.dds.4"/>
+  <File path="fireball_anim_b.dds.5"/>
+  <File path="fireball_anim_b.dds.6"/>
+  <File path="fireball_anim_b.dds.7"/>
+ </Files>
+ <Details>
+  <Detail name="width">2048</Detail>
+  <Detail name="height">2048</Detail>
+  <Detail name="mipCount">10</Detail>
+ </Details>
+</AssetMetadata>

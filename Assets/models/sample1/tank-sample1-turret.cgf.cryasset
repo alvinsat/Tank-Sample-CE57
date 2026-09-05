@@ -1,0 +1,14 @@
+<AssetMetadata version="0" type="Mesh" guid="3fe9ff5d-2bf7-eae3-ef81-6a19b9aae6b8" source="tank-sample1.fbx">
+ <Files>
+  <File path="tank-sample1-turret.cgf"/>
+ </Files>
+ <Details>
+  <Detail name="materialCount">18</Detail>
+  <Detail name="triangleCount">62235</Detail>
+  <Detail name="vertexCount">178902</Detail>
+  <Detail name="16BitPrecision">false</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">%ENGINE%/EngineAssets/Materials/material_default.mtl</Path>
+ </Dependencies>
+</AssetMetadata>

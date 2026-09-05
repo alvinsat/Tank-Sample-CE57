@@ -1,0 +1,10 @@
+<AssetMetadata version="0" type="Texture" guid="b5e61275-03c9-d072-c6ac-7d970b24be9e">
+ <Files>
+  <File path="na_tree_roots_decal_a_ddna.dds"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

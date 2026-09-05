@@ -1,0 +1,15 @@
+<AssetMetadata version="0" type="Texture" guid="a00959f7-c84c-5940-ed8c-6e5df9ee83f7">
+ <Files>
+  <File path="sparks_a.dds"/>
+  <File path="sparks_a.dds.1"/>
+  <File path="sparks_a.dds.2"/>
+  <File path="sparks_a.dds.3"/>
+  <File path="sparks_a.dds.4"/>
+  <File path="sparks_a.dds.5"/>
+ </Files>
+ <Details>
+  <Detail name="width">512</Detail>
+  <Detail name="height">512</Detail>
+  <Detail name="mipCount">8</Detail>
+ </Details>
+</AssetMetadata>

@@ -1,0 +1,78 @@
+<Vehicle name="CustomAbrams">
+    <Physics pushable="0">
+        <Buoyancy waterDensity="150" waterResistance="2500"/>
+        <Simulation maxTimeStep="0.02" minEnergy="0.002" maxLoggedCollisions="2"/>
+    </Physics>
+    <Components>
+        <Component name="hull" damageMax="2500" major="1" position="0,0,0" size="1,1,1" useBoundsFromParts="1" />
+        <Component name="leftTread" damageMax="250" position="-1.5,-0.4,0.5" size="1,7,1.15" useBoundsFromParts="0" hullAffection="0.75" />
+        <Component name="rightTread" damageMax="250" position="1.5,-0.4,0.5" size="1,7,1.15" useBoundsFromParts="0" hullAffection="0.75" />
+    </Components>
+    <Parts>
+        <Part name="body" class="Animated" component="hull">
+            <Animated filename="softleafmaster/models/abrams/m1a1_abrams.cga" />
+            <Parts>
+                <Part name="wheel1" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="0" density="3000" damping="0" driving="0" lenMax="0" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0" rayCast="0"/>
+                </Part>
+                <Part name="wheel2" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="1" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="0"/>
+                </Part>
+                <Part name="wheel3" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="2" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel4" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="3" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel5" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="4" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel6" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="5" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel7" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="6" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel8" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="7" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="0"/>
+                </Part>
+                <Part name="wheel9" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="8" density="3000" damping="0" driving="1" lenMax="0" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0" rayCast="0"/>
+                </Part>
+                <Part name="wheel10" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="0" density="3000" damping="0" driving="0" lenMax="0" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0" rayCast="0"/>
+                </Part>
+                <Part name="wheel11" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="1" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="0"/>
+                </Part>
+                <Part name="wheel12" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="2" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel13" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="3" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel14" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="4" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel15" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="5" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel16" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="6" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="1"/>
+                </Part>
+                <Part name="wheel17" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="7" density="3000" damping="-0.3" driving="0" lenMax="0.7" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0.45" rayCast="0"/>
+                </Part>
+                <Part name="wheel18" class="SubPartWheel" isHidden="0">
+                    <SubPartWheel axle="8" density="3000" damping="0" driving="1" lenMax="0" maxFriction="1.1" minFriction="1.1" stiffness="0" suspLength="0" rayCast="0"/>
+                </Part>
+            </Parts>
+        </Part>
+        <Part name="leftTread" class="Tread" component="leftTread">
+            <Tread filename="softleafmaster/models/abrams/tread_left.chr" materialName="track" uvSpeedMultiplier="-1.26"/>
+        </Part>
+        <Part name="rightTread" class="Tread" component="rightTread">
+            <Tread filename="softleafmaster/models/abrams/tread_right.chr" materialName="track" uvSpeedMultiplier="-1.26"/>
+        </Part>
+    </Parts>
+</Vehicle>

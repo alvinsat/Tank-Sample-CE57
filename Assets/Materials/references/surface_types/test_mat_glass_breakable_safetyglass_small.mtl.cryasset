@@ -1,0 +1,12 @@
+<AssetMetadata version="0" type="Material" guid="ee770b23-5f99-541f-369d-733d1b94ba12">
+ <Files>
+  <File path="test_mat_glass_breakable_safetyglass_small.mtl"/>
+ </Files>
+ <Details>
+  <Detail name="subMaterialCount">0</Detail>
+  <Detail name="textureCount">1</Detail>
+ </Details>
+ <Dependencies>
+  <Path usageCount="1">textures/defaults/grey.dds</Path>
+ </Dependencies>
+</AssetMetadata>
