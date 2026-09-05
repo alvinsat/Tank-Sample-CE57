@@ -1,0 +1,53 @@
+# System & Engine temporary files
+*.lnk
+*.log
+*.thmb.*
+logbackups/
+Editor/
+
+# CRYENGINE build & generator directories
+/bin/
+/solutions/
+/solutions_cmake/
+
+# Visual Studio C++ build outputs & debug symbols
+*.pdb
+*.obj
+*.ilk
+*.idb
+*.iobj
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vsix
+*.cache
+.vs/
+*.suo
+*.user
+*.userosv
+*.sln.docstates
+*.opensdf
+*.sdf
+*.db
+*.opendb
+
+
+# Visual Studio intermediate directories
+x64/
+x86/
+Debug/
+Release/
+ipch/
+$tf/
+
+# EXPLICITLY ALLOW THIRD-PARTY LIBRARIES & DLLs
+# Do NOT include broad *.dll or *.lib rules here so community binaries inside 
+# folders like /Code/Libs/, /Assets/, or third-party SDK paths stay tracked.
