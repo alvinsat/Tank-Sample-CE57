@@ -30,6 +30,171 @@ The engine already has ground-alignment support: `AdvancedAnimationComponent.h` 
 
 In particular, `more/README.md` reports a completed `FootIKSolverComponent` implementation and points to `CE-B-B/CE-base/Code/Components/FootIKSolverComponent.cpp` and `.h`. Neither file exists under this workspace, so that report cannot be independently verified against this checkout. Do not conflate its described custom component with the engine's separate `AdvancedAnimationComponent` ground-alignment option.
 
+The checked-in `.chrparams` loader does **not** read a `GroundAlignment`, `GroundAlign`, or equivalent flag. It reads limb solver definitions and other animation/skeleton metadata. The built-in C3 biped pose aligner selects the `LftLeg01` and `RgtLeg01` limb handles and expects the rig's alignment marker joints (for its human layout: `Bip01 Pelvis`, `Bip01 planeTargetLeft`, and `Bip01 planeTargetRight`; it optionally looks up `Bip01 planeWeightLeft/Right`). Enable alignment separately through the component/runtime path.
+
+#### Important: IK `Handle` versus `EndEffector`
+
+These fields have different jobs. `Root` and `EndEffector` name actual skeleton joints used to construct the solver chain. `Handle` is the identifier used to look up that limb definition. In this engine, `ISkeletonPose::SetHumanLimbIK(targetWorldPosition, strLimb)` lowercases and hashes `strLimb`, then queues that handle for solving; therefore the string argument must match the `.chrparams` `Handle`, not the foot joint/`EndEffector`. For the left biped definition below, the matching call is:
+
+```cpp
+pSkeletonPose->SetHumanLimbIK(targetWorldPosition, "LftLeg01");
+```
+
+The built-in pose aligner likewise looks up limb definitions by `LftLeg01` and `RgtLeg01`. Use distinct handle values to avoid ambiguous lookup. This corrects the conflicting advice in the archived `more/CHRPARAMS-Format.md`, which incorrectly tells readers to pass the foot `EndEffector` name to `SetHumanLimbIK`.
+
+#### Biped ground-alignment limb setup
+
+This is a `.chrparams` IK fragment for a compatible biped rig. Replace the `Root` and `EndEffector` placeholder values with real skeleton joints. For `2BIK`, the hierarchy must be `Root -> middle joint -> EndEffector`, with the root's parent present in the skeleton. The built-in aligner also expects the marker joints listed above; those are rig data, not tags to add to this XML.
+
+```xml
+<Params>
+  <IK_Definition>
+    <LimbIK_Definition>
+      <IK Handle="LftLeg01"
+          Solver="2BIK"
+          Root="REPLACE_WITH_LEFT_UPPER_LEG_JOINT"
+          EndEffector="REPLACE_WITH_LEFT_FOOT_JOINT" />
+      <IK Handle="RgtLeg01"
+          Solver="2BIK"
+          Root="REPLACE_WITH_RIGHT_UPPER_LEG_JOINT"
+          EndEffector="REPLACE_WITH_RIGHT_FOOT_JOINT" />
+    </LimbIK_Definition>
+  </IK_Definition>
+</Params>
+```
+
+#### Broader `.chrparams` parser example
+
+This template illustrates the principal top-level sections, animation-list entries/directives, and IK-definition forms recognized by the runtime `CChrParamLoader` in this checkout. It is not a drop-in character file: replace all placeholder paths and joint/attachment/animation-token names, remove sections your rig does not use, and verify solver-specific hierarchy requirements. The sample animation paths and `$Include` target must exist if used. The Resource Compiler's `SkeletonLoader` consumes a narrower subset: it processes animation lists and Look/Aim IK setup; do not infer from Resource Compiler acceptance that it processes every runtime section below.
+
+```xml
+<Params>
+  <AnimationList>
+    <Animation name="#filepath" path="REPLACE_WITH_PROJECT_ANIMATION_DIRECTORY" />
+    <Animation name="idle" path="idle.caf" />
+    <Animation name="walk" path="walk.caf" />
+    <Animation name="*" path="*/*.caf" />
+    <Animation name="*" path="*.lmg" />
+    <Animation name="*" path="*.bspace" />
+    <Animation name="*" path="*.comb" />
+    <Animation name="face_idle" path="face_idle.fsq" />
+    <Animation name="$AnimEventDatabase" path="REPLACE_WITH_ANIMATION_EVENT_DATABASE" />
+    <Animation name="$TracksDatabase" path="REPLACE_WITH_TRACKS_DATABASE.dba" flags="persistent" />
+    <Animation name="$FaceLib" path="REPLACE_WITH_FACE_LIBRARY" />
+    <Animation name="$Include" path="CommonAnimationList.chrparams" />
+  </AnimationList>
+
+  <Lod>
+    <JointList level="1">
+      <Joint name="REPLACE_WITH_JOINT_TO_KEEP_AT_LOD_1" />
+    </JointList>
+    <JointList level="2">
+      <Joint name="REPLACE_WITH_JOINT_TO_KEEP_AT_LOD_2" />
+    </JointList>
+  </Lod>
+
+  <BBoxIncludeList>
+    <Joint name="REPLACE_WITH_JOINT_INCLUDED_IN_BOUNDS" />
+  </BBoxIncludeList>
+  <BBoxExtension>
+    <Axis negX="0.0" negY="0.0" negZ="0.0"
+          posX="0.0" posY="0.0" posZ="0.0" />
+  </BBoxExtension>
+  <ShadowCapsulesList>
+    <Capsule JointName0="REPLACE_WITH_CAPSULE_START_JOINT"
+             JointName1="REPLACE_WITH_CAPSULE_END_JOINT"
+             Radius="0.1" />
+  </ShadowCapsulesList>
+  <UsePhysProxyBBox />
+
+  <IK_Definition>
+    <LimbIK_Definition>
+      <IK Handle="LftLeg01" Solver="2BIK"
+          Root="REPLACE_WITH_LEFT_UPPER_LEG"
+          EndEffector="REPLACE_WITH_LEFT_FOOT" />
+      <IK Handle="RgtLeg01" Solver="2BIK"
+          Root="REPLACE_WITH_RIGHT_UPPER_LEG"
+          EndEffector="REPLACE_WITH_RIGHT_FOOT" />
+      <IK Handle="Example3BIK" Solver="3BIK"
+          Root="REPLACE_WITH_3BIK_ROOT"
+          EndEffector="REPLACE_WITH_3BIK_END_EFFECTOR" />
+      <IK Handle="ExampleCCDX" Solver="CCDX"
+          Root="REPLACE_WITH_CCDX_ROOT"
+          EndEffector="REPLACE_WITH_CCDX_END_EFFECTOR"
+          fStepSize="0.1" fThreshold="0.01" nMaxIteration="10" />
+      <IK Handle="ExampleCCD5" Solver="CCD5"
+          J0="REPLACE_WITH_CCD5_JOINT_0"
+          J1="REPLACE_WITH_CCD5_JOINT_1"
+          J2="REPLACE_WITH_CCD5_JOINT_2"
+          J3="REPLACE_WITH_CCD5_JOINT_3"
+          J4="REPLACE_WITH_CCD5_JOINT_4" />
+    </LimbIK_Definition>
+
+    <Animation_Driven_IK_Targets>
+      <ADIKTarget Handle="REPLACE_WITH_IK_HANDLE"
+                  Target="REPLACE_WITH_TARGET_JOINT"
+                  Weight="REPLACE_WITH_WEIGHT_JOINT" />
+    </Animation_Driven_IK_Targets>
+    <FeetLock_Definition>
+      <IKHandle Handle="LftLeg01" />
+      <IKHandle Handle="RgtLeg01" />
+    </FeetLock_Definition>
+    <Recoil_Definition>
+      <RIKHandle Handle="REPLACE_WITH_RIGHT_ARM_IK_HANDLE" />
+      <LIKHandle Handle="REPLACE_WITH_LEFT_ARM_IK_HANDLE" />
+      <RWeaponJoint JointName="REPLACE_WITH_RIGHT_WEAPON_JOINT" />
+      <LWeaponJoint JointName="REPLACE_WITH_LEFT_WEAPON_JOINT" />
+      <ImpactJoints>
+        <ImpactJoint JointName="REPLACE_WITH_IMPACT_JOINT"
+                     Arm="0" Delay="0.0" Weight="1.0" />
+      </ImpactJoints>
+    </Recoil_Definition>
+    <LookIK_Definition>
+      <LEyeAttachment Name="REPLACE_WITH_LEFT_EYE_ATTACHMENT" />
+      <REyeAttachment Name="REPLACE_WITH_RIGHT_EYE_ATTACHMENT" />
+      <EyeLimits halfYawDegrees="45"
+                 pitchDegreesUp="45"
+                 pitchDegreesDown="45" />
+      <RotationList>
+        <Rotation JointName="REPLACE_WITH_LOOK_ROTATION_JOINT"
+                  Primary="1" Additive="0" />
+      </RotationList>
+      <PositionList>
+        <Position JointName="REPLACE_WITH_LOOK_POSITION_JOINT"
+                  Additive="0" />
+      </PositionList>
+      <DirectionalBlends>
+        <Joint AnimToken="REPLACE_WITH_LOOK_ANIMATION_TOKEN"
+               ParameterJoint="REPLACE_WITH_LOOK_PARAMETER_JOINT"
+               StartJoint="REPLACE_WITH_LOOK_START_JOINT"
+               ReferenceJoint="REPLACE_WITH_LOOK_REFERENCE_JOINT" />
+      </DirectionalBlends>
+    </LookIK_Definition>
+    <AimIK_Definition>
+      <DirectionalBlends>
+        <Joint AnimToken="REPLACE_WITH_AIM_ANIMATION_TOKEN"
+               ParameterJoint="REPLACE_WITH_AIM_PARAMETER_JOINT"
+               StartJoint="REPLACE_WITH_AIM_START_JOINT"
+               ReferenceJoint="REPLACE_WITH_AIM_REFERENCE_JOINT" />
+      </DirectionalBlends>
+      <RotationList>
+        <Rotation JointName="REPLACE_WITH_AIM_ROTATION_JOINT"
+                  Primary="1" Additive="0" />
+      </RotationList>
+      <PositionList>
+        <Position JointName="REPLACE_WITH_AIM_POSITION_JOINT"
+                  Additive="0" />
+      </PositionList>
+      <ProcAdjustments>
+        <Spine JointName="REPLACE_WITH_SPINE_JOINT" />
+      </ProcAdjustments>
+    </AimIK_Definition>
+  </IK_Definition>
+</Params>
+```
+
+The runtime parser supports top-level `AnimationList`, `Lod`, `BBoxIncludeList`, `BBoxExtension`, `ShadowCapsulesList`, `UsePhysProxyBBox`, and `IK_Definition`. `IK_Definition` supports limb solvers `2BIK`, `3BIK`, `CCDX`, and `CCD5`, animation-driven IK targets, feet lock, recoil, look IK, and aim IK. For `2BIK`, the loader verifies the Root-to-middle-to-EndEffector parent chain and also requires the Root joint's parent; `3BIK` similarly requires two intermediate joints and the Root's parent. `BBoxExcludeList` is explicitly ignored with a warning, and `#ParseSubFolders` is deprecated. These details come from `CryAnimation/ChrParamLoader.cpp`; the Resource Compiler's narrower handling is in `Tools/RC/ResourceCompilerPC/CGA/SkeletonLoader.cpp`.
+
 ### Reading and verification rule
 
 For a change, start at the relevant `GameSDK/Scripts/` entry or configuration, follow the engine/native API into `CRYENGINE_Source/Code/`, and check registration, lifecycle, and resource/configuration dependencies. Use the archived Markdown as supporting context; where an analysis document and checked-in code disagree, the code describes what this checkout currently implements.
