@@ -6,6 +6,65 @@ This file consolidates every `*.md` source file found under the workspace, exclu
 
 This archive contains the Markdown documentation found in the workspace. The source index below links to each included document. The notes in `more/` are project analyses, implementation guides, and proposals; they are not, by themselves, proof that the described feature is present in the checked-in runtime code. Use the source paths in this guide to verify current behavior.
 
+### Blender and FBX tools: what the code does
+
+`blendertools/` is a collection of Autodesk FBX SDK utilities and Blender Python scripts, not one unified or verified export pipeline. The scripts generally operate on `input.fbx` and `sample.FBX`; the latter is used as a reference for skeleton layout and locomotion. The folder also contains two different workflows for generating/processing an armature. Treat the code's actual operations below as authoritative over the surrounding reports' "complete", "production-ready", and "CryEngine-ready" claims.
+
+#### Reference analysis and data generation
+
+| Files | Purpose and output |
+|---|---|
+| `analyze_animations.py`, `analyze_root_motion.py` | FBX SDK command-line diagnostics: enumerate animation stacks/layers and inspect `Bip01` translation/rotation curves and key counts. The former samples curve ranges; the latter prints curve/key details. |
+| `inspect_fbx.py`, `inspect_fbx_detailed.py` | Compare skeleton names/parents/rotations between two FBXs, or print the full node tree and node types. They are inspection tools, not validators of CryEngine import behavior. |
+| `generate_sample_analysis.py` | Reads `sample.FBX` and writes `analysis_sample.txt`, a detailed hierarchy/rest-transform/direction and animated-translation report. |
+| `generate_sample_json.py` | Reads `sample.FBX` and writes `sample_bone_hierarchy.json`, including bone names, parent relationships, local/world transforms, scene axis/unit metadata, and translation-motion summaries. The JSON reports 156 skeleton bones and a +Z-up, right-handed sample scene. |
+
+The analysis scripts classify an axis as active when the sampled translation range exceeds `0.1`; this is a heuristic, not a semantic test that the bone is a locomotion root. The reports identify `Bip01` in `Take 001` / `BaseLayer` as the strongest translating bone in the sample, with `Locator_Locomotion` and `Bip01 Footsteps` also animated. Those observations are findings about this particular sample file, not a general CryEngine skeleton requirement.
+
+#### Blender-native armature generation and export
+
+| Files | Purpose and limits |
+|---|---|
+| `blender_create_tpose_armature_from_sample_json.py` | Inside Blender, reads the JSON hierarchy and creates an armature named `SampleJSON_TPose`. It uses the JSON for names, parents, and approximate lengths, then places bones with name-based direction/offset rules in Blender coordinates (+Z up, +Y forward). It does **not** reproduce the sample FBX rest transforms, skinning, or animation. |
+| `blender_create_apose_armature_from_sample_json.py` | Compatibility wrapper that imports and calls the T-pose generator's `main()` unchanged; despite its filename, it does not create a distinct A-pose. |
+| `blender_export_generated_armature_to_fbx.py` | Checks the named armature against the JSON for expected/missing/extra names, parents, rough direction, nonzero length, and connected finger-chain gaps; then exports the armature plus meshes bound to it, with animation baking and `add_leaf_bones=False`. It records validation findings in a log but does not stop the export when errors exist. The checks do not prove mesh deformation, animation correctness, or successful CryEngine import. |
+| `preprocess_exported_fbx_to_cryengine.py` | FBX SDK postprocess for the generated FBX: removes a non-skeleton wrapper above `Bip01` by hoisting the wrapper's children to scene root, compares skeleton names/parents with `sample.FBX`, preserves animation stacks without rewriting curves, and writes a report. It does not validate actual engine behavior. |
+
+These are prototype construction/structural-check tools. In particular, the generated pose is intentionally heuristic, and the exporter configures FBX axes (`axis_forward="-Z"`, `axis_up="Y"`); independently test the resulting orientation and scale in the intended CryEngine version. The sample analysis reports +Z up, so do not assume the sample and export axis conventions are already reconciled just because an FBX was written.
+
+#### Blender sample-to-target locomotion transfer
+
+`blender_sample_to_input_rootmotion.py` is the more complete Blender-native transfer attempt. It imports sample and target FBXs into separate collections, removes a `root` edit-bone wrapper above `Bip01` when present, adds to the target any bones found in the sample but missing from the target (copying the sample bones' edit-space positions/properties), finds actions by name (defaults `Take 001` and `anim_cc_walk`), remaps frames across action ranges, and copies selected `Bip01` location axes (default `Y Z`). It also transfers location and rotation channels for `Bip01 Footsteps` and `Locator_Locomotion` if both armatures contain those bones. Finally it exports the target collection with Blender's FBX exporter and writes a JSON report.
+
+Important limitations visible in the implementation:
+
+- Clearing the target `Bip01` location curves removes **all** location-axis F-curves before keying the requested axes. With the default `Y Z`, a pre-existing X translation curve is therefore not preserved.
+- It transfers sampled Blender pose-channel values directly, without explicit unit conversion or retargeting for different rest poses/skeleton proportions. Matching names and frame ranges alone do not establish equivalent locomotion.
+- Newly added bones do not receive mesh weights merely by being added to the armature.
+- The exported FBX and JSON report are not in the current `blendertools/` inventory, so this pipeline's result has not been verified here.
+
+#### FBX SDK structure/orientation and root-motion experiments
+
+Several older, separate scripts attempt similar fixes; they should not be treated as interchangeable or all run in sequence:
+
+- `fix_fbx_match_sample.py` and `fbx_bone_fixer_analysis.py` inspect hierarchy/orientations, hoist wrapper children to the scene root, optionally compare bone names against a sample, and set the root rotation to the sample rotation when available (or apply a conditional X-axis adjustment without a sample). The enhanced tool also reports bone-name comparisons. Neither establishes that changing a root's local Euler rotation alone is a correct coordinate-system conversion for every FBX.
+- `fix_skeleton_cryengine.py` and `fbxPostProcess.py` are wrapper-cleanup/diagnostic variants; `fix_skeleton_cryengine.py` also conditionally changes the root X rotation. `fix_bone_structure.py` removes a specifically named `root` wrapper and copies translation curves between two named animation stacks; `fix_bone_structure_working.py` is a simpler wrapper-removal variant.
+- `fix_root_motion.py`, `apply_root_motion_fix.py`, `fix_root_anim_cc_walk_only.py`, `fix_both_animations.py`, and `final_comprehensive_fix.py` are FBX SDK root-motion experiments that copy or synthesize root translation curves from the sample into one or more target walk stacks. Their scaling, frame mapping, axis choice, and target stack differ. Some normalize sample motion against target bobbing; `apply_root_motion_fix.py` also invents X-axis sway. These are not equivalent to retargeting and should not be treated as validated animation fixes.
+- `FbxCommon.py` provides FBX SDK manager/scene load-save helper routines.
+
+#### What the stored results do and do not establish
+
+The checked-in inputs in `blendertools/` are `input.fbx` and `sample.FBX`. The claimed fix/export outputs (including `input_FIXED.fbx`, `input_with_RootMotion.fbx`, `generated_from_json_tpose.fbx`, and `translated_for_cryengine.fbx`) and the associated Blender validation/transfer reports are absent from the folder. A workspace search found no copies elsewhere under `D:\CE` (apart from an unrelated tank sample FBX). Thus the prose reports and generated-looking summaries are not evidence that those output files currently exist or were imported into CryEngine.
+
+The reports conflict with one another: they cite different fixed root rotations (including `X=-90,Y=0,Z=90` and `X=-0.17,Y=11.72,Z=85.53`), different output sizes, and a 102-bone input versus a 156-bone sample. The JSON/report generated from `sample.FBX` supports the 156-bone sample count; it does not prove the input has the same skeleton or that the two hierarchies match. `analysis_output.txt` records a Python `cp1252`/`charmap` Unicode-print failure while running the animation analyzer; a later sample-analysis section appears in the log, but this is not a successful fix/export record. `ROOT_MOTION_FIX_SUMMARY.md`, `ANALYSIS_REPORT_input_vs_sample.md`, `FBX_FIX_COMPLETE_SUMMARY.md`, `FBX_FIX_REPORT.md`, and `README_FBX_FIX.md` should therefore be read as historical claims that may describe outputs from another working directory or run, not as validated deliverables.
+
+#### Recommended next work
+
+1. Decide which source FBX and skeleton are the intended target; inspect both actual FBXs for bone count, hierarchy, axis system, units, action names, and root-motion curves.
+2. Keep originals immutable and run one selected workflow to a new, explicitly named output. Do not combine the legacy fix scripts without understanding their differing hierarchy, rotation, curve-scaling, and frame-mapping changes.
+3. Fix/verify the Blender transfer's axis-preservation behavior and assess target rest-pose/scale compatibility before relying on copied pose channels.
+4. Re-import the generated FBX with an independent FBX reader, compare hierarchy, transforms, animation curves, and mesh bindings, then test model orientation and locomotion in the target CryEngine editor/runtime. Record the exact input/output hashes, tool versions, command, validation log, and engine test result.
+
 ### Where to look
 
 | Area | Source locations | Verified purpose |
