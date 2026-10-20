@@ -1,6 +1,6 @@
 # Combined Markdown Knowledge
 
-This file consolidates every `*.md` source file found under the workspace, excluding this generated document. Source-document content is identified by workspace-relative path; heading levels are normalized beneath each `Document N` heading so GitHub's outline remains navigable.
+This file is unofficial to CryEngine by Crytek. This only seres as community based guideline consolidates every `*.md` source file found under the workspace of my built in project which not everything is hosted here, excluding this generated document. Source-document content is identified by workspace-relative path; heading levels are normalized beneath each `Document N` heading so GitHub's outline remains navigable.
 
 ## Workspace README and verified code guide
 
