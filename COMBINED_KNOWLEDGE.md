@@ -6,6 +6,298 @@ This file consolidates every `*.md` source file found under the workspace, exclu
 
 This archive contains the Markdown documentation found in the workspace. The source index below links to each included document. The notes in `more/` are project analyses, implementation guides, and proposals; they are not, by themselves, proof that the described feature is present in the checked-in runtime code. Use the source paths in this guide to verify current behavior.
 
+# CRYENGINE Ocean Guide
+
+Practical ocean-only notes for the CRYENGINE 5.7.1 Sandbox Python sample.
+This guide takes you from enabling the global terrain ocean to understanding
+its level settings, material, foam, color, and rendering controls.
+
+> **Scope:** This guide covers the global terrain ocean. It does not cover
+> water volumes, rivers, clouds, or general terrain generation.
+
+## Contents
+
+- [Quick start](#quick-start)
+- [Python workflow](#python-workflow)
+- [How ocean settings fit together](#how-ocean-settings-fit-together)
+- [Level environment settings](#level-environment-settings)
+- [Material and surface appearance](#material-and-surface-appearance)
+- [Shoreline foam](#shoreline-foam)
+- [Time of Day tint](#time-of-day-tint)
+- [Ocean rendering CVars](#ocean-rendering-cvars)
+- [Troubleshooting](#troubleshooting)
+- [Verified source locations](#verified-source-locations)
+
+## Quick start
+
+1. Open the target level in Sandbox.
+2. Open the editor's Python console and enable the terrain ocean:
+
+   ```python
+   from sandbox import general, terrain
+
+   general.set_cvar("e_WaterOcean", 1)
+   terrain.set_ocean_height()
+   ```
+
+3. Enter the desired height in the dialog. The beachnight sample suggests
+   `16`.
+4. Check the level's ocean material and environment settings.
+5. Review the result and save the level.
+
+> `terrain.set_ocean_height()` opens a dialog and takes no arguments. Ocean
+> height is stored with the terrain heightmap, not in `environment.xml`.
+
+## Python workflow
+
+The editor's terrain commands are registered in the `sandbox.terrain` module.
+They operate on the currently open level.
+
+### Enable or remove the ocean
+
+```python
+from sandbox import general, terrain
+
+# 0 = off, 1 = usual render path, 2 = fast path with merged fog.
+general.set_cvar("e_WaterOcean", 1)
+
+# Opens the ocean-height dialog; enter the height in the editor.
+terrain.set_ocean_height()
+
+# Removes ocean/water from the terrain.
+# terrain.remove_ocean()
+```
+
+`general.set_cvar()` changes a registered runtime CVar. It does not edit
+level XML or material parameters.
+
+### Run the sample script
+
+From the Sandbox Python console, run:
+
+```python
+from sandbox import general
+
+general.run_file(r"C:\path\to\gamesdk\pythoncode\beachnight.py")
+```
+
+Replace the example path with the actual installation path.
+`general.run_file()` accepts an absolute path or a path relative to the editor
+user folder.
+
+### What `beachnight.py` does
+
+The sample script sets the time-of-day clock to `19.0`, enables
+`e_WaterOcean`, and runs terrain-generation, island-shaping, coast-smoothing,
+and ocean-height editor commands.
+
+Only enabling `e_WaterOcean` and setting ocean height directly control the
+ocean. Island shaping and coast smoothing modify the terrain heightmap. The
+script is interactive: terrain generation and ocean height use editor
+dialogs, so it is not an unattended generator. For the intended sample
+workflow, enter `16` in the ocean-height dialog. Review changes before saving.
+
+## How ocean settings fit together
+
+Ocean setup is split among several systems. Changing one does not
+automatically update the others.
+
+| Setting | Configured in | What it controls |
+| --- | --- | --- |
+| Ocean height | Terrain heightmap; edited through the Sandbox height dialog | Height of the global terrain ocean. |
+| Ocean material | Level `environment.xml` | Water shader/material and its surface parameters. |
+| Ocean animation and caustics | Level `environment.xml` | Wave animation and caustic settings. |
+| Ocean depth-fog tint | Time of Day preset | Color seen through ocean depth fog. |
+| Render switches and quality | Runtime CVars | Whether and how the ocean is rendered. |
+
+In particular, `e_WaterOcean` enables rendering; it does not set ocean height,
+wave values, or material appearance.
+
+## Level environment settings
+
+The engine reads ocean material, caustics, and animation attributes from
+level environment data.
+
+| Setting | Engine default | Beachnight value |
+| --- | ---: | ---: |
+| `Ocean Material` | `%ENGINE%/EngineAssets/Materials/Water/Ocean_default` | `SoftLeafMaster/ocean_default.mtl` |
+| `Ocean CausticsMultiplier` | `0.85` | Not specified |
+| `Ocean CausticsDistanceAtten` | `100.0` | Not specified |
+| `Ocean CausticsTilling` | `1.0` | `1.0` |
+| `Ocean CausticDepth` | `8.0` | `8.0` |
+| `Ocean CausticIntensity` | `1.0` | `1.0` |
+| `OceanAnimation WindDirection` | `1.0` | `1` |
+| `OceanAnimation WindSpeed` | `4.0` | `1` |
+| `OceanAnimation WavesAmount` | `1.5` | `0.0999999` (effective value `0.4`) |
+| `OceanAnimation WavesSize` | `0.75` | `0.8` |
+
+The loader clamps `WavesAmount` to `0.4`..`3.0` and `WavesSize` to
+`0.0`..`3.0`. Therefore beachnight's authored `WavesAmount="0.0999999"`
+becomes `0.4` at runtime.
+
+## Material and surface appearance
+
+The engine default ocean material is
+`Engine/EngineAssets/Materials/Water/ocean_default.mtl`, using
+`Shader="Water"` and `GenMask="C20"`. Beachnight uses the project material
+`SoftLeafMaster/ocean_default.mtl` instead. The following values describe the
+engine default material, not necessarily the beachnight overrides. Inspect
+the project material when matching that level.
+
+| Material parameter | Engine default | What it affects |
+| --- | ---: | --- |
+| `NormalsScale` | `1` | Main wave-normal strength. |
+| `DetailNormalsScale` | `1` | Detail normal contribution. |
+| `DetailTilling` | `1` | Detail normal tiling. |
+| `Tilling` | `50` | Main normal-map tiling. |
+| `HeightScale` | `0.2` | Water surface height/displacement scale. |
+| `RipplesNormalsScale` | `1` | Ripple normal contribution. |
+| `RainTilling` | `1` | Rain ripple tiling. |
+| `SoftIntersectionFactor` | `1` | Softens intersections with scene depth. |
+| `RefractionBumpScale` | `0.025` | Refraction distortion from normals. |
+| `ReflectionScale` | `2.5` | Reflection contribution. |
+| `ReflectionBumpScale` | `0.05` | Normal-driven reflection distortion. |
+| `FresnelPower` | `5` | Fresnel reflection falloff. |
+| `FresnelBias` | `0.05` | Fresnel baseline. |
+| `GradientScale` | `0.1` | Gradient contribution to surface shading. |
+| `SubSurfaceScatteringScale` | `2` | Subsurface-scattering contribution. |
+| `FoamAmount` | `0.5` | Foam contribution. |
+| `FoamCrestAmount` | `1.5` | Additional crest foam on supported tessellated paths. |
+| `FoamSoftIntersectionFactor` | `2` | Foam strength at scene-depth intersections. |
+| `FoamTilling` | `0.75` | Foam texture tiling. |
+
+Material/shader names follow the checked-in files, including the historical
+spelling `Tilling`.
+
+<details>
+<summary>Shader defaults and parameter ranges</summary>
+
+These are the water shader's tweakable defaults and UI ranges. Material files
+can override them. Values authored in `ocean_default.mtl` are shown separately
+in the material table above; for example, the engine material's `Tilling=50`
+is higher than the shader UI range.
+
+| Parameter | Shader default | Range / condition |
+| --- | ---: | --- |
+| `SoftIntersectionFactor` | `1.0` | `0`..`10` |
+| `Tilling` | `10` | `0`..`32` |
+| `DetailTilling` | `2.5` | `0`..`32` |
+| `RainTilling` | `1` | `0`..`1` |
+| `FresnelGloss` | `0.9` | `0`..`1` |
+| `ReflectionScale` | `1` | `0`..`32` |
+| `SubSurfaceScatteringScale` | `2` | `0`..`10` |
+| `ReflectionBumpScale` | `0.1` | `0`..`1` |
+| `RefractionBumpScale` | `0.1` | `0`..`1` |
+| `DetailNormalsScale` | `0.5` | `0`..`4` |
+| `NormalsScale` | `1.25` | `0`..`4` |
+| `GradientScale` | `0.1` | `0`..`0.15` |
+| `HeightScale` | `0.2` | `0`..`0.25` |
+| `FoamSoftIntersectionFactor` | `0.75` | `0.35`..`10`; requires `%FOAM` |
+| `FoamAmount` | `1` | `0`..`8`; requires `%FOAM` |
+| `FoamCrestAmount` | `1` | `0`..`10`; requires `%FOAM` |
+| `FoamTilling` | `12` | `0`..`32`; requires `%FOAM` |
+| `RipplesNormalsScale` | `1` | `0`..`4` |
+
+`FresnelPower` and `FresnelBias` are present in the default material but are
+not declared as tweakable `Water.cfx` parameters. `FakeCameraSpeed` is a
+conditional control that only appears when `%FAKE_CAMERA_MOVEMENT` is enabled;
+it is not a standard ocean appearance setting.
+</details>
+
+## Shoreline foam
+
+The default ocean material enables the `%FOAM` shader feature through its
+generation mask. The water shader samples
+`EngineAssets/Shading/WaterFoam.tif` and computes foam from the depth
+difference between the water surface and scene geometry. This can create foam
+where ocean water intersects beach geometry.
+
+This is **not** a shoreline wave-run-up simulation, generated shoreline
+geometry, or physical foam simulation. Appearance depends on the material
+feature, scene-depth intersection, and camera/render path. Extra wave-crest
+foam uses the hardware-tessellation path and may not be active on every
+renderer or quality setting.
+
+## Time of Day tint
+
+The beachnight Time of Day preset defines ocean depth-fog tint. These curves
+affect water viewed through depth fog; they do not set shallow-water color or
+foam.
+
+| Variable | Beachnight value | Allowed range |
+| --- | --- | --- |
+| `PARAM_OCEANFOG_COLOR` | RGB `(0.00121411, 0.00913406, 0.017642)` | Each channel `0`..`1` |
+| `PARAM_OCEANFOG_COLOR_MULTIPLIER` | `0.5` | `0`..`1` |
+| `PARAM_OCEANFOG_DENSITY` | `0.5` | `0`..`1` |
+
+The current keys use the same values throughout the day. Edit them in the
+Environment/Time of Day editor. Reflections, sky, refraction, and the ocean
+material also contribute to visible surface color.
+
+## Ocean rendering CVars
+
+These are runtime engine or renderer controls. They do not edit level XML,
+Time of Day curves, or material values. From Sandbox Python, use
+`general.set_cvar("name", value)` or
+`general.run_console("name value")`.
+
+| CVar | Purpose / values noted in source |
+| --- | --- |
+| `e_WaterOcean` | Ocean rendering: `0` off, `1` usual path, `2` fast path with merged fog. |
+| `e_WaterOceanBottom` | Toggles drawing the ocean bottom. |
+| `e_WaterOceanFFT` | FFT ocean displacement; requires water shader quality High or better. |
+| `e_WaterTessellationAmount` | Ocean tessellation amount; registered default `10`. |
+| `e_WaterTessellationAmountX` | Optional explicit X tessellation amount; `0` means unused. |
+| `e_WaterTessellationAmountY` | Optional explicit Y tessellation amount; `0` means unused. |
+| `e_WaterTessellationSwathWidth` | Ocean mesh strip swath width; registered default `12`. |
+| `r_WaterTessellationHW` | Hardware ocean tessellation toggle (`0`/`1`) on supported renderers. |
+| `r_WaterReflections` | Toggles water reflections (`0`/`1`). |
+| `r_WaterReflectionsQuality` | Reflection contents: `0` terrain, `1` terrain + particles, `2` + brushes, `3` everything. |
+| `r_WaterReflectionsMGPU` | Deprecated multi-GPU reflection setting. |
+| `r_WaterReflectionsUseMinOffset` | Enables minimum reflection distance offset. |
+| `r_WaterReflectionsMinVisiblePixelsUpdate` | Visibility threshold used when deciding to update reflections. |
+| `r_WaterReflectionsMinVisUpdateFactorMul` | Reflection update-factor multiplier when ocean is mostly occluded. |
+| `r_WaterReflectionsMinVisUpdateDistanceMul` | Reflection update-distance multiplier when ocean is mostly occluded. |
+| `r_WaterUpdateDistance` | Water reflection texture update distance factor. |
+| `r_WaterUpdateFactor` | Reflection texture update factor; source comment says `0` updates every frame. |
+| `r_WaterUpdateThread` | Enables water updates on another thread when supported. |
+| `r_ReflectionsOffset` | Offset used by water reflections. |
+| `r_WaterCaustics` | Toggles underwater ocean caustics (`0`/`1`). |
+| `r_WaterCausticsDistance` | Maximum distance for ocean caustics. |
+| `r_WaterCausticsDeferred` | Deferred caustics: `0` off, `1` enabled, `2` enabled with stencil pre-pass. |
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| Ocean is not visible | Confirm `e_WaterOcean` is enabled and the level has an ocean height. |
+| Ocean is at the wrong height | Run `terrain.set_ocean_height()` and enter the desired value in the dialog. |
+| Python script pauses | Expected: ocean-height and terrain-generation commands open editor dialogs. |
+| Foam does not look like breaking waves | Foam is a depth-intersection shader effect, not a wave run-up simulation. |
+| Material values differ | The project material may override the engine default material. |
+
+## Verified source locations
+
+- `Code/Sandbox/EditorQt/Terrain/TerrainEditor.cpp` — registers the terrain
+  Python module and commands.
+- `Code/Sandbox/EditorQt/TerrainDialog.cpp` — implements island shaping and
+  the modal ocean-height dialog.
+- `Code/CryEngine/Cry3DEngine/3dEngineLoad.cpp` — reads ocean material,
+  caustics, and animation values from level environment data.
+- `Code/CryEngine/Cry3DEngine/cvars.cpp` — registers engine water CVars.
+- `Code/CryEngine/RenderDll/Common/RendererCVars.cpp` — registers renderer
+  reflection, caustics, and tessellation controls.
+- `Engine/EngineAssets/Materials/Water/ocean_default.mtl` — engine default
+  ocean material values.
+- `Engine/Shaders/Water.ext` and
+  `Engine/Shaders/HWScripts/CryFX/Water.cfx` — ocean foam feature, material
+  controls, and depth-intersection shader logic.
+- `Engine/Shaders/HWScripts/CryFX/WaterCommon.cfi` — foam texture binding.
+- `levels/beachnight/leveldata/environment.xml` — sample ocean material,
+  caustics, and animation settings.
+- `levels/beachnight/leveldata/timeofday.xml` — sample ocean tint curves.
+
+
 ### Blender and FBX tools: what the code does
 
 `blendertools/` is a collection of Autodesk FBX SDK utilities and Blender Python scripts, not one unified or verified export pipeline. The scripts generally operate on `input.fbx` and `sample.FBX`; the latter is used as a reference for skeleton layout and locomotion. The folder also contains two different workflows for generating/processing an armature. Treat the code's actual operations below as authoritative over the surrounding reports' "complete", "production-ready", and "CryEngine-ready" claims.
